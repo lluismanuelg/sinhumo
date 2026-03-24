@@ -1,5 +1,5 @@
 // SinHumo Service Worker v1.1 — fuerza actualización
-const CACHE_NAME = 'sinhumo-v19';
+const CACHE_NAME = 'sinhumo-v20';
 const ASSETS_TO_CACHE = [
   '/',
   '/index.html',
