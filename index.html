@@ -444,6 +444,17 @@ textarea:focus{border-color:var(--green);}
 .tip-list{display:flex;flex-direction:column;gap:0.55rem;margin-bottom:1.1rem;}
 .tip-item{display:flex;align-items:flex-start;gap:0.75rem;padding:0.75rem 0.9rem;background:var(--s1);border:1px solid var(--border);border-radius:11px;font-size:0.8rem;color:var(--muted2);line-height:1.5;}
 .tip-num{font-family:'Syne',sans-serif;font-size:0.7rem;font-weight:700;color:var(--teal);min-width:20px;}
+/* Breathing widget */
+.breath-widget{display:flex;flex-direction:column;align-items:center;gap:1rem;padding:1.5rem 0;}
+.breath-ring{width:120px;height:120px;border-radius:50%;background:rgba(52,211,153,0.15);border:2px solid rgba(52,211,153,0.3);display:flex;align-items:center;justify-content:center;transition:transform 4s ease,background 4s ease;transform:scale(1);}
+.breath-text{font-family:'Syne',sans-serif;font-size:1rem;font-weight:700;color:var(--text);text-align:center;}
+.breath-phase{font-size:0.82rem;color:var(--muted2);font-weight:500;text-align:center;}
+/* Timer widget */
+.timer-widget{display:flex;flex-direction:column;align-items:center;gap:0.75rem;padding:1.25rem 0;}
+.timer-display{font-family:'Syne',sans-serif;font-size:2.8rem;font-weight:800;color:var(--crisis);letter-spacing:-0.03em;}
+.timer-bar-wrap{width:100%;height:6px;background:var(--s3);border-radius:100px;overflow:hidden;}
+.timer-bar{height:100%;background:linear-gradient(90deg,var(--crisis),#fcd34d);border-radius:100px;width:100%;transition:width 1s linear;}
+
 /* Crisis — full screen bottom sheet */
 #crisis-modal{display:none;position:fixed;inset:0;background:rgba(8,9,11,0.75);backdrop-filter:blur(8px);z-index:100;align-items:flex-end;justify-content:center;}
 #crisis-modal.open{display:flex;}
@@ -489,6 +500,15 @@ textarea:focus{border-color:var(--green);}
 .cel-btn-close{background:transparent;border:1px solid var(--border);border-radius:11px;padding:0.7rem;font-family:'Instrument Sans',sans-serif;font-size:0.85rem;color:var(--muted);cursor:pointer;}
 .toast{position:fixed;bottom:6rem;left:50%;transform:translateX(-50%) translateY(30px);background:var(--s1);border:1px solid var(--border);border-radius:9px;padding:0.55rem 1.2rem;font-size:0.83rem;font-weight:500;transition:all 0.3s;z-index:300;opacity:0;white-space:nowrap;}
 .toast.show{transform:translateX(-50%) translateY(0);opacity:1;}
+/* Smooth transitions */
+.page{transition:opacity 0.15s ease;}
+button,input,select,textarea{-webkit-tap-highlight-color:transparent;}
+input[type="number"],input[type="text"],input[type="email"],input[type="password"],input[type="date"],input[type="time"],select{min-height:44px;}
+/* Focus-visible for keyboard nav */
+:focus-visible{outline:2px solid var(--green);outline-offset:2px;border-radius:4px;}
+:focus:not(:focus-visible){outline:none;}
+/* Reduced motion */
+@media(prefers-reduced-motion:reduce){*,*::before,*::after{animation-duration:0.01ms!important;animation-iteration-count:1!important;transition-duration:0.01ms!important;}}
 @media(max-width:520px){
   .stats-row{grid-template-columns:1fr 1fr}
   .stats-row .stat-card:last-child{grid-column:span 2}
@@ -552,14 +572,14 @@ textarea:focus{border-color:var(--green);}
         <button class="auth-tab" onclick="switchObAuthTab('login',this)">Ya tengo cuenta</button>
       </div>
       <div id="ob-register-form">
-        <div class="field"><label>Tu nombre</label><input type="text" id="ob-name" placeholder="ej. Lluis"></div>
+        <div class="field"><label>Tu nombre</label><input type="text" id="ob-reg-name" placeholder="ej. Lluis"></div>
         <div class="field"><label>Email</label><input type="email" id="ob-email" placeholder="tu@email.com"></div>
-        <div class="field"><label>Contrasena</label><input type="password" id="ob-pass" placeholder="Minimo 6 caracteres"></div>
+        <div class="field"><label>Contraseña</label><input type="password" id="ob-pass" placeholder="Mínimo 6 caracteres"></div>
         <button class="btn-main" onclick="obRegisterEmail()">Crear cuenta y continuar</button>
       </div>
       <div id="ob-login-form" style="display:none">
         <div class="field"><label>Email</label><input type="email" id="ob-login-email" placeholder="tu@email.com"></div>
-        <div class="field"><label>Contrasena</label><input type="password" id="ob-login-pass" placeholder="Tu contrasena"></div>
+        <div class="field"><label>Contraseña</label><input type="password" id="ob-login-pass" placeholder="Tu contraseña"></div>
         <button class="btn-main" onclick="obLoginEmail()">Entrar</button>
       </div>
       <div style="text-align:center;margin-top:1rem">
@@ -710,7 +730,7 @@ textarea:focus{border-color:var(--green);}
   </div>
 
   <!-- Add goal modal -->
-  <div id="add-goal-modal">
+  <div id="add-goal-modal" role="dialog" aria-modal="true" aria-label="Nuevo objetivo">
     <div class="add-goal-sheet">
       <div class="ags-title">🎯 Nuevo objetivo</div>
       <div class="ags-sub">Pega la URL de Amazon, escribe el nombre y el precio. El enlace de afiliado se genera automáticamente.</div>
@@ -875,7 +895,7 @@ textarea:focus{border-color:var(--green);}
     </div>
 
     <!-- Version -->
-    <div style="text-align:center;font-size:0.72rem;color:var(--muted);padding:1rem 0">SinHumo v4.1 · PWA</div>
+    <div style="text-align:center;font-size:0.72rem;color:var(--muted);padding:1rem 0">SinHumo v5.0 · PWA</div>
   </div>
 
   <!-- RANKING PAGE -->
@@ -968,18 +988,18 @@ textarea:focus{border-color:var(--green);}
     </div>
   </div>
 
-  <nav class="bottom-nav">
-    <button class="nav-item active" onclick="showPage('inicio',this)"><span class="ni">🏠</span></button>
-    <button class="nav-item" onclick="showPage('meds',this)"><span class="ni">💊</span></button>
-    <button class="nav-item" onclick="showPage('habits',this)"><span class="ni">🧠</span></button>
-    <button class="nav-item" onclick="showPage('rewards',this)"><span class="ni">🎁</span></button>
-    <button class="nav-item" onclick="showPage('salud',this)"><span class="ni">🫀</span></button>
-    <button class="nav-item" onclick="showPage('ranking',this)"><span class="ni">🏆</span></button>
-    <button class="nav-item" onclick="showPage('ajustes',this)"><span class="ni">⚙️</span></button>
+  <nav class="bottom-nav" role="navigation" aria-label="Navegación principal">
+    <button class="nav-item active" onclick="showPage('inicio',this)" aria-label="Inicio" aria-current="page"><span class="ni">🏠</span></button>
+    <button class="nav-item" onclick="showPage('meds',this)" aria-label="Medicación"><span class="ni">💊</span></button>
+    <button class="nav-item" onclick="showPage('habits',this)" aria-label="Hábitos"><span class="ni">🧠</span></button>
+    <button class="nav-item" onclick="showPage('rewards',this)" aria-label="Objetivos"><span class="ni">🎁</span></button>
+    <button class="nav-item" onclick="showPage('salud',this)" aria-label="Salud"><span class="ni">🫀</span></button>
+    <button class="nav-item" onclick="showPage('ranking',this)" aria-label="Ranking"><span class="ni">🏆</span></button>
+    <button class="nav-item" onclick="showPage('ajustes',this)" aria-label="Ajustes"><span class="ni">⚙️</span></button>
   </nav>
 </div>
 
-<div id="crisis-modal">
+<div id="crisis-modal" role="dialog" aria-modal="true" aria-label="Apoyo en crisis">
   <div class="crisis-panel">
     <div class="crisis-head">
       <h2>🆘 Apoyo en crisis</h2>
@@ -1038,6 +1058,7 @@ window.addEventListener('appinstalled', () => {
 // ── iOS detection ─────────────────────────────────────────────
 const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
 const isInStandaloneMode = window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone;
+if (isIOS) document.body.classList.add('ios-body');
 
 if (isIOS && !isInStandaloneMode && !localStorage.getItem('iosDismissed')) {
   setTimeout(() => {
@@ -1096,8 +1117,10 @@ const MILESTONES=[{days:1,l:'24h'},{days:3,l:'3 días'},{days:7,l:'1 sem'},{days
 
 let U=null,MC=null,DL={},LOG=[],GOALS=[],WL=[],chatHist=[],selMedType=null,selMedFormType=null,activeTrig=null;
 
-async function sv(k,v){try{await window.storage.set(k,JSON.stringify(v));}catch(e){localStorage.setItem(k,JSON.stringify(v));}}
-async function ld(k){try{const r=await window.storage.get(k);return r?JSON.parse(r.value):null;}catch(e){const v=localStorage.getItem(k);return v?JSON.parse(v):null;}}
+// ── Storage abstraction with localStorage fallback ────────────
+if(!window.storage){window.storage={_s:localStorage,async set(k,v){this._s.setItem(k,v);},async get(k){const v=this._s.getItem(k);return v!=null?{value:v}:null;}};}
+async function sv(k,v){try{await window.storage.set(k,JSON.stringify(v));}catch(e){try{localStorage.setItem(k,JSON.stringify(v));}catch(e2){console.error('[SinHumo] Storage error:',e2);}}}
+async function ld(k){try{const r=await window.storage.get(k);return r?JSON.parse(r.value):null;}catch(e){try{const v=localStorage.getItem(k);return v?JSON.parse(v):null;}catch(e2){return null;}}}
 
 window.onload=async()=>{
   U=await ld('U');MC=await ld('MC');DL=(await ld('DL'))||{};LOG=(await ld('LOG'))||[];
@@ -1195,7 +1218,7 @@ async function signInGoogle() {
 
 async function obRegisterEmail() {
   if (!fbReady) await initFirebase();
-  const name = document.getElementById('ob-name').value.trim() || 'Amigo';
+  const name = document.getElementById('ob-reg-name').value.trim() || 'Amigo';
   const email = document.getElementById('ob-email').value.trim();
   const pass = document.getElementById('ob-pass').value;
   if (!email) { showToast('Introduce tu email'); return; }
@@ -1317,7 +1340,7 @@ function togTrig(el,k){el.classList.toggle('sel');obTrigs.has(k)?obTrigs.delete(
 function finishOb(){U.triggers=[...obTrigs];sv('U',U);launch();}
 function buildMC(med,s,tm,te,c){let phases=[];if(med==='champix')phases=[{dayStart:1,dayEnd:3,morning:'0,5mg',evening:null,label:'0,5mg × 1/día'},{dayStart:4,dayEnd:7,morning:'0,5mg',evening:'0,5mg',label:'0,5mg × 2/día'},{dayStart:8,dayEnd:84,morning:'1mg',evening:'1mg',label:'1mg × 2/día'}];else if(med==='bupropion')phases=[{dayStart:1,dayEnd:7,morning:'150mg',evening:null,label:'150mg × 1/día'},{dayStart:8,dayEnd:63,morning:'150mg',evening:'150mg',label:'150mg × 2/día'}];else phases=[{dayStart:1,dayEnd:84,morning:'Dosis',evening:'Dosis',label:c||'Según prescripción'}];MC={med,startDate:s,timeMorning:tm,timeEvening:te,phases};sv('MC',MC);}
 function launch(){document.getElementById('onboarding').style.display='none';document.getElementById('app').style.display='block';renderInicio();renderHabits();renderRewards();initFirebase();}
-function showPage(id,btn){document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));document.getElementById('page-'+id).classList.add('active');document.querySelectorAll('.nav-item').forEach(n=>n.classList.remove('active'));btn.classList.add('active');if(id==='meds')renderMeds();if(id==='habits')renderHabits();if(id==='rewards')renderRewards();if(id==='salud')renderSalud();if(id==='ranking')renderRanking();if(id==='ajustes')renderAjustes();}
+function showPage(id,btn){document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));document.getElementById('page-'+id).classList.add('active');document.querySelectorAll('.nav-item').forEach(n=>{n.classList.remove('active');n.removeAttribute('aria-current');});btn.classList.add('active');btn.setAttribute('aria-current','page');if(id==='meds')renderMeds();if(id==='habits')renderHabits();if(id==='rewards')renderRewards();if(id==='salud')renderSalud();if(id==='ranking')renderRanking();if(id==='ajustes')renderAjustes();}
 function toDS(d){return d.toISOString().split('T')[0];}
 function fmtD(d){return d.toLocaleDateString('es-ES',{day:'numeric',month:'short'});}
 function getDays(){
@@ -1336,11 +1359,12 @@ function hasQuitDayArrived(){
 }
 function getMoney(){if(!U)return 0;return parseFloat((getDays()*U.cigs*(U.price/20)).toFixed(2));}
 function showToast(m){const t=document.getElementById('toast');t.textContent=m;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),2500);}
-function affUrl(u){return u+(u.includes('?')?'&':'?')+'tag='+AMAZON_TAG;}
+function esc(s){if(!s)return '';const d=document.createElement('div');d.textContent=s;return d.innerHTML;}
+function affUrl(u){if(!u)return '';try{const parsed=new URL(u);if(!parsed.hostname.includes('amazon'))return u;return u+(u.includes('?')?'&':'?')+'tag='+AMAZON_TAG;}catch(e){return u;}}
 
 function renderInicio(){if(!U)return;
   const days=getDays(),cigs=Math.floor(days*U.cigs),money=getMoney();
-  document.getElementById('greeting').textContent='Hola, '+U.name;
+  document.getElementById('greeting').textContent='Hola, '+(U.name||'Amigo');
 
   // Pre-quit state: show countdown instead of progress
   const prequit = document.getElementById('prequit-banner');
@@ -1366,8 +1390,8 @@ function renderInicio(){if(!U)return;
   const ptsBadge=document.getElementById('user-pts-badge');if(ptsBadge)ptsBadge.textContent=calcTotalPoints().toLocaleString()+' pts';
   }
 
-  document.getElementById('s-days').textContent=days;document.getElementById('s-cigs').textContent=cigs;document.getElementById('s-money').textContent=money.toFixed(0)+'€';const next=MILESTONES.find(m=>m.days>days)||MILESTONES[MILESTONES.length-1];const prev=[...MILESTONES].reverse().find(m=>m.days<=days)||{days:0};const pct=next.days===prev.days?100:Math.round(((days-prev.days)/(next.days-prev.days))*100);document.getElementById('ms-lbl').textContent='Hito: '+next.l;document.getElementById('ms-fill').style.width=Math.min(pct,100)+'%';document.getElementById('ms-cur').textContent=days+' días';document.getElementById('ms-tgt').textContent='Meta: '+next.days+' días';if(LOG.length){document.getElementById('log-hist-card').style.display='block';document.getElementById('log-hist').innerHTML=LOG.slice(0,5).map(l=>`<div style="border-bottom:1px solid var(--border);padding:0.65rem 0"><div style="font-size:0.7rem;color:var(--muted)">${l.date}</div><div style="display:flex;gap:1rem;font-size:0.78rem;margin-top:0.2rem"><span style="color:var(--green)">😊 ${l.mood}/10</span><span style="color:var(--crisis)">🔥 ${l.craving}/10</span></div>${l.note?`<div style="font-size:0.78rem;color:var(--muted2);font-style:italic;margin-top:0.2rem">${l.note}</div>`:''}</div>`).join('');}}
-async function saveLog(){const today=toDS(new Date());const e={date:today,mood:document.getElementById('m-sl').value,craving:document.getElementById('c-sl').value,note:document.getElementById('log-note').value.trim()};LOG=LOG.filter(l=>l.date!==today);LOG.unshift(e);await sv('LOG',LOG);document.getElementById('log-note').value='';const b=document.getElementById('log-btn');b.textContent='✓ Guardado';setTimeout(()=>b.textContent='Guardar',2000);renderInicio();}
+  document.getElementById('s-days').textContent=days;document.getElementById('s-cigs').textContent=cigs;document.getElementById('s-money').textContent=money.toFixed(0)+'€';const next=MILESTONES.find(m=>m.days>days)||MILESTONES[MILESTONES.length-1];const prev=[...MILESTONES].reverse().find(m=>m.days<=days)||{days:0};const pct=next.days===prev.days?100:Math.round(((days-prev.days)/(next.days-prev.days))*100);document.getElementById('ms-lbl').textContent='Hito: '+next.l;document.getElementById('ms-fill').style.width=Math.min(pct,100)+'%';document.getElementById('ms-cur').textContent=days+' días';document.getElementById('ms-tgt').textContent='Meta: '+next.days+' días';if(LOG.length){document.getElementById('log-hist-card').style.display='block';document.getElementById('log-hist').innerHTML=LOG.slice(0,5).map(l=>`<div style="border-bottom:1px solid var(--border);padding:0.65rem 0"><div style="font-size:0.7rem;color:var(--muted)">${l.date}</div><div style="display:flex;gap:1rem;font-size:0.78rem;margin-top:0.2rem"><span style="color:var(--green)">😊 ${l.mood}/10</span><span style="color:var(--crisis)">🔥 ${l.craving}/10</span></div>${l.note?`<div style="font-size:0.78rem;color:var(--muted2);font-style:italic;margin-top:0.2rem">${esc(l.note)}</div>`:''}</div>`).join('');}}
+async function saveLog(){const today=toDS(new Date());const e={date:today,mood:document.getElementById('m-sl').value,craving:document.getElementById('c-sl').value,note:document.getElementById('log-note').value.trim()};LOG=LOG.filter(l=>l.date!==today);LOG.unshift(e);await sv('LOG',LOG);document.getElementById('log-note').value='';const b=document.getElementById('log-btn');b.textContent='✓ Guardado';setTimeout(()=>b.textContent='Guardar',2000);renderInicio();syncToFirebase();}
 function showMedForm(){document.getElementById('no-med').style.display='none';document.getElementById('med-form').style.display='block';}
 function selMedForm(m){selMedFormType=m;['champix','bupropion','otro'].forEach(x=>{document.getElementById('mf-'+x).classList.toggle('sel',x===m);const p=document.getElementById('mf-pb-'+x);if(p)p.style.display=x===m?'block':'none';});document.getElementById('mf-pb-otro').style.display=m==='otro'?'block':'none';}
 async function saveMedForm(){if(!selMedFormType){showToast('Selecciona medicamento');return;}buildMC(selMedFormType,document.getElementById('mf-start').value||toDS(new Date()),document.getElementById('mf-tm').value,document.getElementById('mf-te').value,document.getElementById('mf-custom')?.value||'');showToast('✓ Activado');setTimeout(()=>renderMeds(),500);}
@@ -1403,7 +1427,7 @@ function renderGoalCards(money) {
       <div class="goal-card ${unlocked ? 'goal-unlocked' : 'goal-active'}">
         <div class="gc-body" style="padding-top:1.25rem">
           ${unlocked ? '<div style="font-size:0.75rem;font-weight:700;color:var(--green);margin-bottom:0.5rem;text-transform:uppercase;letter-spacing:0.07em">✅ ¡Desbloqueado!</div>' : ''}
-          <div class="gc-name">${g.name}</div>
+          <div class="gc-name">${esc(g.name)}</div>
           <div class="gc-price-row">
             <div class="gc-price">${g.price.toFixed(2)}€</div>
             <div class="gc-remaining">${unlocked ? 'Ya puedes comprarlo' : 'Faltan ' + remaining + '€'}</div>
@@ -1483,17 +1507,20 @@ function buyGoal(idx) {
   const money = getMoney();
   document.getElementById('cel-title').textContent = '¡' + money.toFixed(0) + '€ ahorrados!';
   document.getElementById('cel-sub').textContent = 'Lo mereces. Esto es tuyo.';
-  document.getElementById('cel-buy-btn').onclick = () => {
-    window.open(affUrl(g.url), '_blank');
-    closeCelebrate();
-  };
+  const buyBtn = document.getElementById('cel-buy-btn');
+  if (g.url) {
+    buyBtn.style.display = 'block';
+    buyBtn.onclick = () => { window.open(affUrl(g.url), '_blank'); closeCelebrate(); };
+  } else {
+    buyBtn.style.display = 'none';
+  }
   document.getElementById('celebrate').classList.add('show');
 }
 
 function closeCelebrate() { document.getElementById('celebrate').classList.remove('show'); }
 function calcBMI(w,h){return w/((h/100)*(h/100));}
 function bmiCategory(bmi){if(bmi<18.5)return{label:'Bajo peso',color:'var(--blue)',bg:'rgba(96,165,250,0.12)',idx:0};if(bmi<25)return{label:'Normal',color:'var(--green)',bg:'rgba(52,211,153,0.12)',idx:1};if(bmi<30)return{label:'Sobrepeso',color:'var(--amber)',bg:'rgba(251,191,36,0.12)',idx:2};return{label:'Obesidad',color:'var(--red)',bg:'rgba(248,113,113,0.12)',idx:3};}
-async function logWeight(){const val=parseFloat(document.getElementById('w-input').value);if(!val||val<30||val>250){showToast('Peso no válido');return;}const today=toDS(new Date());WL=WL.filter(w=>w.date!==today);WL.push({date:today,weight:val});WL.sort((a,b)=>a.date.localeCompare(b.date));U.weight=val;await sv('WL',WL);await sv('U',U);document.getElementById('w-input').value='';showToast('⚖️ Registrado');renderSalud();}
+async function logWeight(){const val=parseFloat(document.getElementById('w-input').value);if(!val||val<30||val>250){showToast('Peso no válido');return;}const today=toDS(new Date());WL=WL.filter(w=>w.date!==today);WL.push({date:today,weight:val});WL.sort((a,b)=>a.date.localeCompare(b.date));U.weight=val;await sv('WL',WL);await sv('U',U);document.getElementById('w-input').value='';showToast('⚖️ Registrado');renderSalud();syncToFirebase();}
 function renderSalud(){if(!U)return;const days=getDays();const currentW=WL.length?WL[WL.length-1].weight:U.weight;const firstW=WL.length?WL[0].weight:U.weight;const delta=WL.length>1?currentW-firstW:0;const bmi=calcBMI(currentW,U.height||175);const cat=bmiCategory(bmi);document.getElementById('wh-weight').innerHTML=currentW.toFixed(1)+' <span class="wh-unit">kg</span>';document.getElementById('wh-imc').textContent=bmi.toFixed(1);const deltaEl=document.getElementById('wh-delta');if(WL.length>1){const sign=delta>0?'+':'';deltaEl.textContent=sign+delta.toFixed(1)+' kg';deltaEl.style.color=delta>2?'var(--amber)':delta<0?'var(--green)':'var(--teal)';}else{deltaEl.textContent='—';deltaEl.style.color='var(--muted2)';}const badge=document.getElementById('bmi-badge-hero');badge.textContent=cat.label;badge.style.background=cat.bg;badge.style.color=cat.color;renderWeightChart();const hist=document.getElementById('w-history');if(WL.length>1){hist.innerHTML='<div style="font-size:0.7rem;text-transform:uppercase;letter-spacing:0.07em;color:var(--muted);margin-bottom:0.5rem">Historial</div>'+[...WL].reverse().slice(0,8).map(w=>{const b=calcBMI(w.weight,U.height||175);const c=bmiCategory(b);return`<div style="display:flex;justify-content:space-between;align-items:center;padding:0.4rem 0;border-bottom:1px solid var(--border);font-size:0.82rem"><span style="color:var(--muted2)">${w.date}</span><span style="font-family:'Syne',sans-serif;font-weight:700">${w.weight} kg</span><span style="font-size:0.72rem;color:${c.color}">${b.toFixed(1)}</span></div>`;}).join('');}else{hist.innerHTML='';}const cells=document.querySelectorAll('.imc-cell');cells.forEach((c,i)=>{c.classList.toggle('active-imc',i===cat.idx);});const imcTexts={0:`IMC ${bmi.toFixed(1)} — bajo peso. Una pequeña ganancia al dejar de fumar puede ser positiva.`,1:`IMC ${bmi.toFixed(1)} — normal. Una ganancia de 2–4 kg temporal es fisiológica. Vigila la tendencia.`,2:`IMC ${bmi.toFixed(1)} — sobrepeso leve. La guía de alimentación y la caminata diaria son especialmente relevantes.`,3:`IMC ${bmi.toFixed(1)}. Dejar de fumar sigue siendo la decisión más importante. Coordina ambos objetivos con tu médico.`};document.getElementById('imc-text').textContent=imcTexts[cat.idx];renderTimeline(days);renderBenefits(days);}
 function renderWeightChart(){const svg=document.getElementById('weight-svg');if(WL.length<2){svg.innerHTML='<text x="200" y="45" text-anchor="middle" fill="#6b7280" font-size="12" font-family="Instrument Sans">Registra al menos 2 pesadas para ver la gráfica</text>';return;}const W=400,H=80,pad=20;const weights=WL.map(w=>w.weight);const minW=Math.min(...weights)-1,maxW=Math.max(...weights)+1;const xStep=(W-pad*2)/(WL.length-1);const yScale=v=>H-pad-((v-minW)/(maxW-minW))*(H-pad*2);const pts=WL.map((w,i)=>({x:pad+i*xStep,y:yScale(w.weight)}));const pathD='M '+pts.map(p=>`${p.x},${p.y}`).join(' L ');const areaD=pathD+` L ${pts[pts.length-1].x},${H-5} L ${pts[0].x},${H-5} Z`;svg.innerHTML=`<defs><linearGradient id="wg" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#2dd4bf" stop-opacity="0.3"/><stop offset="100%" stop-color="#2dd4bf" stop-opacity="0"/></linearGradient></defs><path d="${areaD}" fill="url(#wg)"/><path d="${pathD}" fill="none" stroke="#2dd4bf" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>${pts.map((p,i)=>`<circle cx="${p.x}" cy="${p.y}" r="3" fill="#2dd4bf"/>`).join('')}${pts.map((p,i)=>`<text x="${p.x}" y="${p.y-8}" text-anchor="middle" fill="#9ca3af" font-size="8" font-family="Instrument Sans">${WL[i].weight}</text>`).join('')}`;}
 function renderTimeline(days){const minutesSinceQuit=days*24*60;const totalItems=PHYSIO.length;let lastReachedIdx=-1;PHYSIO.forEach((item,i)=>{if(minutesSinceQuit>=item.mins)lastReachedIdx=i;});let progressPct=0;if(lastReachedIdx>=0){const next=PHYSIO[lastReachedIdx+1];if(next){const segPct=(minutesSinceQuit-PHYSIO[lastReachedIdx].mins)/(next.mins-PHYSIO[lastReachedIdx].mins);progressPct=((lastReachedIdx+segPct)/(totalItems-1))*100;}else{progressPct=100;}}document.getElementById('timeline-wrap').innerHTML=`<div style="position:relative;padding:0 12px"><div class="timeline-track" id="tl-track"><div class="timeline-progress-line" style="width:${progressPct}%;max-width:calc(100% - 48px)"></div>${PHYSIO.map((item,i)=>{const reached=minutesSinceQuit>=item.mins;const isCurrent=reached&&i===lastReachedIdx;const cls=isCurrent?'current':reached?'reached':'future';return`<div class="tl-item ${cls}"><div class="tl-dot"></div><div class="tl-label">${item.short}</div><div class="tl-desc">${item.icon} ${item.desc}</div>${reached?'<div class="tl-check">✓</div>':''}</div>`;}).join('')}</div></div>`;}
@@ -1945,20 +1972,6 @@ function updateAuthUI() {
 }
 
 // ── Auth actions ──────────────────────────────────────────────
-async function signInGoogle() {
-  if (!fbReady) await initFirebase();
-  try {
-    const { signInWithRedirect, getRedirectResult, GoogleAuthProvider } = window._fbAuth;
-    const provider = new GoogleAuthProvider();
-    // Use redirect (works in PWA/mobile webview, popup does not)
-    await signInWithRedirect(fbAuth, provider);
-    // Page will reload — result handled in initFirebase via onAuthStateChanged
-  } catch(e) {
-    console.error('Google sign-in error:', e);
-    showToast('Error con Google — inténtalo de nuevo');
-  }
-}
-
 async function registerEmail() {
   if (!fbReady) await initFirebase();
   const nick = document.getElementById('reg-nick').value.trim();
@@ -2290,7 +2303,7 @@ async function loadLeaderboard() {
         <div class="lb-pos ${posClass}">${i < 3 ? medals[i] : '#' + (i+1)}</div>
         <div class="lb-avatar">${avatar}</div>
         <div class="lb-info">
-          <div class="lb-nick">${d.nickname}${isMe ? ' <span style="color:var(--pill);font-size:0.65rem">(tú)</span>' : ''}</div>
+          <div class="lb-nick">${esc(d.nickname)}${isMe ? ' <span style="color:var(--pill);font-size:0.65rem">(tú)</span>' : ''}</div>
           <div class="lb-days">${d.days} días sin fumar</div>
         </div>
         <div class="lb-pts">
@@ -2324,7 +2337,7 @@ function renderDemoLeaderboard(myPts, myDays) {
         <div class="lb-pos ${posClass}">${i < 3 ? medals[i] : '#' + (i+1)}</div>
         <div class="lb-avatar">${avatar}</div>
         <div class="lb-info">
-          <div class="lb-nick">${d.nick}${d.isMe?' <span style="color:var(--pill);font-size:0.65rem">(tú)</span>':''}</div>
+          <div class="lb-nick">${esc(d.nick)}${d.isMe?' <span style="color:var(--pill);font-size:0.65rem">(tú)</span>':''}</div>
           <div class="lb-days">${d.days} días sin fumar</div>
         </div>
         <div class="lb-pts">
@@ -2344,13 +2357,7 @@ function switchRankTab(tab, btn) {
 
 // saveNickname replaced by registerEmail/loginEmail
 
-// ── Auto-sync on key actions ──────────────────────────────────
-// Call syncToFirebase after saveLog, logWeight, markDose
-const _origSaveLog = saveLog;
-saveLog = async function() { await _origSaveLog(); syncToFirebase(); };
-
-const _origLogWeight = logWeight;
-logWeight = async function() { await _origLogWeight(); syncToFirebase(); };
+// ── Auto-sync is called directly inside saveLog and logWeight ──
 
 // ── AJUSTES ───────────────────────────────────────────────────
 let ajMedSel = null;
@@ -2428,7 +2435,6 @@ async function saveAjPersonal() {
   U.name = name || U.name;
   const nick = document.getElementById('aj-nick').value.trim();
   if(nick) U.nickname = nick;
-  U.quitDay = qd || U.quitDay;
   U.cigs = parseInt(document.getElementById('aj-cigs').value) || U.cigs;
   U.price = parseFloat(document.getElementById('aj-price').value) || U.price;
   await sv('U', U);
@@ -2507,9 +2513,9 @@ async function hardReset() {
   } catch(e){}
   document.getElementById('app').style.display='none';
   document.getElementById('onboarding').style.display='flex';
-  // Reset to step 1
+  // Reset to step 0 (auth gate)
   document.querySelectorAll('.ob-step').forEach(s=>s.classList.remove('active'));
-  document.getElementById('step1').classList.add('active');
+  document.getElementById('step0').classList.add('active');
   document.querySelectorAll('.ob-dot').forEach(d=>d.classList.remove('active'));
   document.getElementById('d0').classList.add('active');
   showToast('Datos borrados — empieza de nuevo');
@@ -2519,14 +2525,14 @@ async function resetAll() {
   if (!confirm('¿Borrar TODOS los datos? Esta acción no se puede deshacer.')) return;
   U = null; MC = null; DL = {}; LOG = []; GOALS = []; WL = [];
   await sv('U', null); await sv('MC', null); await sv('DL', {}); await sv('LOG', []); await sv('GOALS', []); await sv('WL', []);
+  try{['U','MC','DL','LOG','GOALS','WL','installDismissed','iosDismissed'].forEach(k=>localStorage.removeItem(k));}catch(e){}
   document.getElementById('app').style.display = 'none';
   document.getElementById('onboarding').style.display = 'flex';
-  document.getElementById('ob-quit').valueAsDate = new Date();
-  document.getElementById('step1').classList.add('active');
-  ['step2','step3','step4'].forEach(s => document.getElementById(s).classList.remove('active'));
-  ['d0'].forEach((d,i) => document.getElementById(d).classList.add('active'));
-  ['d1','d2','d3'].forEach(d => document.getElementById(d).classList.remove('active'));
-  showToast('Datos borrados');
+  document.querySelectorAll('.ob-step').forEach(s => s.classList.remove('active'));
+  document.getElementById('step0').classList.add('active');
+  document.querySelectorAll('.ob-dot').forEach(d => d.classList.remove('active'));
+  document.getElementById('d0').classList.add('active');
+  showToast('Datos borrados — empieza de nuevo');
 }
 </script>
 </body>
